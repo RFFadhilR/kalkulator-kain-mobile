@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "976365410690",
+    "project_id": "ttk-sablon",
+    "storage_bucket": "ttk-sablon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976365410690:android:c191ce24638a774569179b",
+        "android_client_info": {
+          "package_name": "com.ttksablon.kalkulator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976365410690-hbrgf1lgr2hfqa0ome43aiu3m220gmde.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ttksablon.kalkulator",
+            "certificate_hash": "3363207202d6dfa3a23cf96c3a4580cb53e2cf7f"
+          }
+        },
+        {
+          "client_id": "976365410690-3nad22c0hfv7i6jt9l2bvsj7ojd3o8t8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGsbIMhp6voreopehrCA-rk_9XY09bI9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976365410690-3nad22c0hfv7i6jt9l2bvsj7ojd3o8t8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
