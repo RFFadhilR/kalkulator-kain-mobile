@@ -1,5 +1,5 @@
-import 'package:apk_bapak/pages/berandaPage.dart';
-import 'package:apk_bapak/pages/kalkulatorPage.dart';
+import 'package:apk_bapak/pages/beranda/berandaPage.dart';
+import 'package:apk_bapak/pages/kalkulator/kalkulatorPage.dart';
 import 'package:apk_bapak/pages/loginPage.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,15 +13,22 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  var cUser = FirebaseAuth.instance.currentUser;
+
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ),
   );
 
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
-      home: LoginPage(),
+
+      /// home: LoginPage(),
+      /// home: MyApp(),
+      home: cUser == null ? LoginPage() : MyApp(),
     ),
   );
 }
@@ -37,19 +44,6 @@ class _MyAppState extends State<MyApp> {
   var indexBottom = 0;
   List colors;
   PaletteGenerator generator;
-
-  @override
-  void initState() {
-    _coba();
-    super.initState();
-  }
-
-  _coba() async {
-    generator = await PaletteGenerator.fromImageProvider(
-        AssetImage("assets/images/coba.png"));
-    print(generator.dominantColor.color);
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {

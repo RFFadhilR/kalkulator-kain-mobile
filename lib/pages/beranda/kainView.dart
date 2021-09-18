@@ -1,4 +1,9 @@
+import 'package:apk_bapak/pages/beranda/addKain.dart';
+import 'package:apk_bapak/pages/loginPage.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class KainView extends StatefulWidget {
@@ -9,6 +14,10 @@ class KainView extends StatefulWidget {
 }
 
 class _KainViewState extends State<KainView> {
+  final etCari = TextEditingController();
+
+  bool isCari = false;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -20,6 +29,7 @@ class _KainViewState extends State<KainView> {
           Container(
             child: Row(
               children: [
+                /// Field Cari
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
@@ -31,7 +41,13 @@ class _KainViewState extends State<KainView> {
                       children: [
                         Expanded(
                           child: TextField(
+                            controller: etCari,
                             cursorColor: HexColor("#5D26C1"),
+                            onTap: () {
+                              setState(() {
+                                isCari = true;
+                              });
+                            },
                             decoration: InputDecoration(
                               hintText: "Cari",
                               isDense: true,
@@ -40,33 +56,51 @@ class _KainViewState extends State<KainView> {
                             ),
                           ),
                         ),
-                        Container(
-                          width: 20,
-                          height: 20,
-                          margin: EdgeInsets.only(right: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.close_rounded,
-                            color: Colors.white,
-                            size: 15,
-                          ),
-                        ),
+                        FocusScope.of(context).hasFocus && isCari
+                            ? GestureDetector(
+                                onTap: () {
+                                  etCari.clear();
+                                  FocusScope.of(context).unfocus();
+                                  isCari = false;
+                                },
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  margin: EdgeInsets.only(right: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.close_rounded,
+                                    color: Colors.white,
+                                    size: 15,
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 10, 10),
-                  padding: EdgeInsets.all(7),
-                  decoration: BoxDecoration(
-                      color: Colors.green.shade100,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Icon(
-                    Icons.add_rounded,
-                    color: Colors.green,
+
+                /// Button Tambah
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => TambahDataKain(),
+                    ),
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 5, 10, 10),
+                    padding: EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                        color: Colors.green.shade100,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Icon(
+                      Icons.add_rounded,
+                      color: Colors.green,
+                    ),
                   ),
                 )
               ],
@@ -81,8 +115,9 @@ class _KainViewState extends State<KainView> {
                   width: size.width,
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                   decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: IntrinsicHeight(
                     child: Row(
                       children: [
@@ -100,27 +135,23 @@ class _KainViewState extends State<KainView> {
                           child: Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Jenis Kain",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       "Pemilik",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -146,7 +177,7 @@ class _KainViewState extends State<KainView> {
                                 IntrinsicHeight(
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text("Total Kain"),
                                       Expanded(
@@ -167,8 +198,7 @@ class _KainViewState extends State<KainView> {
                                       ),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .end,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text("12.0 (Kg)"),
                                           Text("40.0 (m)")
@@ -189,8 +219,7 @@ class _KainViewState extends State<KainView> {
                         ),
                         IntrinsicWidth(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -210,8 +239,7 @@ class _KainViewState extends State<KainView> {
                                       "Sunting",
                                       style: TextStyle(
                                         color: Colors.blue,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -226,8 +254,7 @@ class _KainViewState extends State<KainView> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
-                                    bottomRight:
-                                    Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
                                   ),
                                 ),
                                 padding: EdgeInsets.all(5),
@@ -242,8 +269,7 @@ class _KainViewState extends State<KainView> {
                                       "Hapus",
                                       style: TextStyle(
                                         color: Colors.red,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -279,27 +305,23 @@ class _KainViewState extends State<KainView> {
                           child: Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Jenis Kain",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       "Pemilik",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -325,7 +347,7 @@ class _KainViewState extends State<KainView> {
                                 IntrinsicHeight(
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text("Total Kain"),
                                       Expanded(
@@ -346,8 +368,7 @@ class _KainViewState extends State<KainView> {
                                       ),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .end,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text("12.0 (Kg)"),
                                           Text("40.0 (m)")
@@ -368,8 +389,7 @@ class _KainViewState extends State<KainView> {
                         ),
                         IntrinsicWidth(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -389,8 +409,7 @@ class _KainViewState extends State<KainView> {
                                       "Sunting",
                                       style: TextStyle(
                                         color: Colors.blue,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -405,8 +424,7 @@ class _KainViewState extends State<KainView> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
-                                    bottomRight:
-                                    Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
                                   ),
                                 ),
                                 padding: EdgeInsets.all(5),
@@ -421,8 +439,7 @@ class _KainViewState extends State<KainView> {
                                       "Hapus",
                                       style: TextStyle(
                                         color: Colors.red,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -458,27 +475,23 @@ class _KainViewState extends State<KainView> {
                           child: Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Jenis Kain",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       "Pemilik",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -504,7 +517,7 @@ class _KainViewState extends State<KainView> {
                                 IntrinsicHeight(
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text("Total Kain"),
                                       Expanded(
@@ -525,8 +538,7 @@ class _KainViewState extends State<KainView> {
                                       ),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .end,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text("12.0 (Kg)"),
                                           Text("40.0 (m)")
@@ -547,8 +559,7 @@ class _KainViewState extends State<KainView> {
                         ),
                         IntrinsicWidth(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -568,8 +579,7 @@ class _KainViewState extends State<KainView> {
                                       "Sunting",
                                       style: TextStyle(
                                         color: Colors.blue,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -584,8 +594,7 @@ class _KainViewState extends State<KainView> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
-                                    bottomRight:
-                                    Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
                                   ),
                                 ),
                                 padding: EdgeInsets.all(5),
@@ -600,8 +609,7 @@ class _KainViewState extends State<KainView> {
                                       "Hapus",
                                       style: TextStyle(
                                         color: Colors.red,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -637,27 +645,23 @@ class _KainViewState extends State<KainView> {
                           child: Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Jenis Kain",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       "Pemilik",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -683,7 +687,7 @@ class _KainViewState extends State<KainView> {
                                 IntrinsicHeight(
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text("Total Kain"),
                                       Expanded(
@@ -704,8 +708,7 @@ class _KainViewState extends State<KainView> {
                                       ),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .end,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text("12.0 (Kg)"),
                                           Text("40.0 (m)")
@@ -726,8 +729,7 @@ class _KainViewState extends State<KainView> {
                         ),
                         IntrinsicWidth(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -747,8 +749,7 @@ class _KainViewState extends State<KainView> {
                                       "Sunting",
                                       style: TextStyle(
                                         color: Colors.blue,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -763,8 +764,7 @@ class _KainViewState extends State<KainView> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
-                                    bottomRight:
-                                    Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
                                   ),
                                 ),
                                 padding: EdgeInsets.all(5),
@@ -779,8 +779,7 @@ class _KainViewState extends State<KainView> {
                                       "Hapus",
                                       style: TextStyle(
                                         color: Colors.red,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -816,27 +815,23 @@ class _KainViewState extends State<KainView> {
                           child: Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Jenis Kain",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       "Pemilik",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -862,7 +857,7 @@ class _KainViewState extends State<KainView> {
                                 IntrinsicHeight(
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text("Total Kain"),
                                       Expanded(
@@ -883,8 +878,7 @@ class _KainViewState extends State<KainView> {
                                       ),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .end,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text("12.0 (Kg)"),
                                           Text("40.0 (m)")
@@ -905,8 +899,7 @@ class _KainViewState extends State<KainView> {
                         ),
                         IntrinsicWidth(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -926,8 +919,7 @@ class _KainViewState extends State<KainView> {
                                       "Sunting",
                                       style: TextStyle(
                                         color: Colors.blue,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -942,8 +934,7 @@ class _KainViewState extends State<KainView> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
-                                    bottomRight:
-                                    Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
                                   ),
                                 ),
                                 padding: EdgeInsets.all(5),
@@ -958,8 +949,7 @@ class _KainViewState extends State<KainView> {
                                       "Hapus",
                                       style: TextStyle(
                                         color: Colors.red,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -995,27 +985,23 @@ class _KainViewState extends State<KainView> {
                           child: Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Jenis Kain",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       "Pemilik",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          fontWeight:
-                                          FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -1041,7 +1027,7 @@ class _KainViewState extends State<KainView> {
                                 IntrinsicHeight(
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text("Total Kain"),
                                       Expanded(
@@ -1062,8 +1048,7 @@ class _KainViewState extends State<KainView> {
                                       ),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .end,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text("12.0 (Kg)"),
                                           Text("40.0 (m)")
@@ -1084,8 +1069,7 @@ class _KainViewState extends State<KainView> {
                         ),
                         IntrinsicWidth(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -1105,8 +1089,7 @@ class _KainViewState extends State<KainView> {
                                       "Sunting",
                                       style: TextStyle(
                                         color: Colors.blue,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -1121,8 +1104,7 @@ class _KainViewState extends State<KainView> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
-                                    bottomRight:
-                                    Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
                                   ),
                                 ),
                                 padding: EdgeInsets.all(5),
@@ -1137,8 +1119,7 @@ class _KainViewState extends State<KainView> {
                                       "Hapus",
                                       style: TextStyle(
                                         color: Colors.red,
-                                        fontWeight:
-                                        FontWeight.w600,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
