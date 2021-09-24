@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../loginPage.dart';
+import '../login/loginPage.dart';
 
 class KalkulatorPage extends StatefulWidget {
   const KalkulatorPage({Key key}) : super(key: key);
@@ -39,7 +39,7 @@ class _KalkulatorPageState extends State<KalkulatorPage> {
                 headerAnimationLoop: false,
                 dismissOnBackKeyPress: false,
                 dismissOnTouchOutside: false,
-                dialogType: DialogType.WARNING,
+                dialogType: DialogType.QUESTION,
                 animType: AnimType.SCALE,
                 btnOkText: "Iyaa",
                 btnCancelText: "Tidak",

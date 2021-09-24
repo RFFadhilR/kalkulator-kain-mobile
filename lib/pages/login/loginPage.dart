@@ -11,7 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sweetalert/sweetalert.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   GoogleSignInAccount user;
   final googleSignIn = GoogleSignIn();
-  DatabaseReference akun = FirebaseDatabase.instance.reference().child("akun");
   CollectionReference cAkun = FirebaseFirestore.instance.collection("akun");
 
   signInWithGoogle() async {

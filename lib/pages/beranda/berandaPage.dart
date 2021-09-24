@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../loginPage.dart';
+import '../login/loginPage.dart';
 
 class BerandaPage extends StatefulWidget {
   const BerandaPage({Key key}) : super(key: key);
@@ -46,7 +46,7 @@ class _BerandaPageState extends State<BerandaPage> {
                 headerAnimationLoop: false,
                 dismissOnBackKeyPress: false,
                 dismissOnTouchOutside: false,
-                dialogType: DialogType.WARNING,
+                dialogType: DialogType.QUESTION,
                 animType: AnimType.SCALE,
                 btnOkText: "Iyaa",
                 btnCancelText: "Tidak",

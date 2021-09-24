@@ -38,6 +38,8 @@ dependencies:
   shared_preferences: any
   firebase_database: any
   cloud_firestore: any
+  shimmer: any
+  image_picker: any
 
 dev_dependencies:
   flutter_test:

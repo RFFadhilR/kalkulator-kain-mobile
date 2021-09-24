@@ -1,13 +1,12 @@
 import 'package:apk_bapak/pages/beranda/berandaPage.dart';
 import 'package:apk_bapak/pages/kalkulator/kalkulatorPage.dart';
-import 'package:apk_bapak/pages/loginPage.dart';
+import 'package:apk_bapak/pages/login/loginPage.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +28,7 @@ Future<void> main() async {
       /// home: LoginPage(),
       /// home: MyApp(),
       home: cUser == null ? LoginPage() : MyApp(),
+      // home: Coba(),
     ),
   );
 }
@@ -42,8 +42,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var indexBottom = 0;
-  List colors;
-  PaletteGenerator generator;
 
   @override
   Widget build(BuildContext context) {
